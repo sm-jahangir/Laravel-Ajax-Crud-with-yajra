@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -12,8 +13,28 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    { 
+        if ($request->ajax()) {
+            $data = User::latest()->get();
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                           $btn = '<a id="EditCustomer"  data-id="'.$row->id.'" class="edit btn btn-primary btn-sm">Edit</a>';
+                           $btn = $btn.' <a id="deleteCustomer"  data-id="'.$row->id.'" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                            return $btn;
+                    })
+                    ->editColumn('created_at', function ($user) {
+                        // return $user->created_at->format('Y/m/d');
+                        return $user->created_at->diffForHumans();
+                    })
+                    ->editColumn('updated_at', function ($user) {
+                        // return $user->created_at->format('Y/m/d');
+                        return $user->updated_at->diffForHumans();
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
         return view('users');
     }
 
