@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductAjaxController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,4 @@ Route::get('/', function () {
 Route::resource('ajaxproducts', ProductAjaxController::class);
 Route::resource('customer', CustomerController::class);
 Route::resource('company', CompanyController::class);
+Route::resource('users', UserController::class);
